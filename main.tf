@@ -1,9 +1,9 @@
 resource "aws_launch_template" "main" {
   name = "${var.component}-${var.env}"
-  #
-  #  iam_instance_profile {
-  #    name = "test"
-  #  }
+
+    iam_instance_profile {
+      name = aws_iam_instance_profile.main.name
+    }
 
   image_id = data.aws_ami.ami.id
   instance_market_options {
@@ -27,37 +27,37 @@ resource "aws_launch_template" "main" {
   } ))
 }
 
-resource "aws_autoscaling_group" "main" {
-  name                  = "${var.component}- ${var.env}"
-  desired_capacity      = var.desired_capacity
-  max_size              = var.max_size
-  min_size              = var.min_size
-  vpc_zone_identifier   = var.subnets
+  resource "aws_autoscaling_group" "main" {
+    name                  = "${var.component}- ${var.env}"
+    desired_capacity      = var.desired_capacity
+    max_size              = var.max_size
+    min_size              = var.min_size
+    vpc_zone_identifier   = var.subnets
 
-  launch_template {
-    id      = aws_launch_template.main.id
-    version = "$Latest"
+    launch_template {
+      id      = aws_launch_template.main.id
+      version = "$Latest"
+    }
+    tag {
+      key                 = "Name"
+      propagate_at_launch = false
+      value               = "${var.component}- ${var.env}"
+    }
   }
-  tag {
-    key                 = "Name"
-    propagate_at_launch = false
-    value               = "${var.component}- ${var.env}"
-  }
-}
 
 
-resource "aws_security_group" "main" {
-  name        = "${var.component}- ${var.env}"
-  description = "${var.component}- ${var.env}"
-  vpc_id      = var.vpc_id
+  resource "aws_security_group" "main" {
+    name        = "${var.component}- ${var.env}"
+    description = "${var.component}- ${var.env}"
+    vpc_id      = var.vpc_id
 
-  ingress {
-    description      = "TLS from VPC"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = var.bastion_cidr
-  }
+    ingress {
+      description      = "TLS from VPC"
+      from_port        = 22
+      to_port          = 22
+      protocol         = "tcp"
+      cidr_blocks      = var.bastion_cidr
+    }
 
   egress {
     from_port        = 0
