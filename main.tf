@@ -19,5 +19,5 @@ resource "aws_launch_template" "foo" {
     tags = merge(var.tags, { Name = "${var.component}- ${var.env}" })
   }
 
-  user_data = filebase64("${path.module}/example.sh")
+#  user_data = filebase64("${path.module}/example.sh")
 }
