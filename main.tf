@@ -1,9 +1,9 @@
 resource "aws_launch_template" "main" {
   name = "${var.component}-${var.env}"
-#
-#  iam_instance_profile {
-#    name = "test"
-#  }
+  #
+  #  iam_instance_profile {
+  #    name = "test"
+  #  }
 
   image_id = data.aws_ami.ami.id
   instance_market_options {
@@ -20,8 +20,10 @@ resource "aws_launch_template" "main" {
   }
 
 
-
-#  user_data = filebase64("${path.module}/example.sh")
+  user_data = base64encode(templatefile("${path.module}/userdata.sh"), {
+    component = var.component
+    env       = var.env
+  } )
 }
 
 resource "aws_autoscaling_group" "main" {
