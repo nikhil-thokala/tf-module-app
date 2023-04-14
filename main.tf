@@ -10,8 +10,8 @@ resource "aws_launch_template" "main" {
     market_type = "spot"
   }
 
-  instance_type = var.instance_type
-  vpc_security_group_ids{}
+  instance_type          = var.instance_type
+  vpc_security_group_ids = [aws_security_group.main.id]
 
 
   tag_specifications {
@@ -49,15 +49,14 @@ resource "aws_autoscaling_group" "main" {
 resource "aws_security_group" "main" {
   name        = "${var.component}- ${var.env}"
   description = "${var.component}- ${var.env}"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
+    from_port        = 22
+    to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = [aws_vpc.main.cidr_block]
-    ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+    cidr_blocks      = var.bastion_cidr
   }
 
   egress {
@@ -68,7 +67,5 @@ resource "aws_security_group" "main" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = {
-    Name = "allow_tls"
-  }
+  tags = merge(var.tags, { Name = "${var.component}- ${var.env}" })
 }
