@@ -1,5 +1,5 @@
-resource "aws_launch_template" "foo" {
-  name = "${var.component}- ${var.env}"
+resource "aws_launch_template" "main" {
+  name = "${var.component}-${var.env}"
 #
 #  iam_instance_profile {
 #    name = "test"
