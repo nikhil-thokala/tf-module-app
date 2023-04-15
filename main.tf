@@ -91,5 +91,12 @@ resource "aws_launch_template" "main" {
         timeout             = 4
       }
       tags = merge(var.tags, { Name = "${var.component}-${var.env}" })
-
     }
+
+#  resource "aws_route53_record" "main" {
+#    zone_id = data.aws_route53_zone.domain.zone_id
+#    name    = "${var.component}-${var.env}.${var.dns_domain}"
+#    type    = "CNAME"
+#    ttl     = 30
+#    records = [aws_eip.lb.public_ip]
+#  }
