@@ -52,20 +52,20 @@ resource "aws_launch_template" "main" {
     vpc_id      = var.vpc_id
 
     ingress {
-      description      = "TLS from VPC"
-      from_port        = 22
-      to_port          = 22
+      description      = "APP"
+      from_port        = var.port
+      to_port          = var.port
       protocol         = "tcp"
-      cidr_blocks      = var.bastion_cidr
+      cidr_blocks      = var.allow_app_to
     }
 
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+    egress {
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+    }
 
   tags = merge(var.tags, { Name = "${var.component}- ${var.env}" })
 }
