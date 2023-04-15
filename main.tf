@@ -17,7 +17,7 @@ resource "aws_launch_template" "main" {
   tag_specifications {
     resource_type = "instance"
 
-    tags = merge(var.tags, { Name = "${var.component}- ${var.env}" })
+    tags = merge(var.tags, { Name = "${var.component}-${var.env}" })
   }
 
 
@@ -28,7 +28,7 @@ resource "aws_launch_template" "main" {
 }
 
   resource "aws_autoscaling_group" "main" {
-    name                  = "${var.component}- ${var.env}"
+    name                  = "${var.component}-${var.env}"
     desired_capacity      = var.desired_capacity
     max_size              = var.max_size
     min_size              = var.min_size
@@ -42,14 +42,14 @@ resource "aws_launch_template" "main" {
     tag {
       key                 = "Name"
       propagate_at_launch = false
-      value               = "${var.component}- ${var.env}"
+      value               = "${var.component}-${var.env}"
     }
   }
 
 
   resource "aws_security_group" "main" {
-    name        = "${var.component}- ${var.env}"
-    description = "${var.component}- ${var.env}"
+    name        = "${var.component}-${var.env}"
+    description = "${var.component}-${var.env}"
     vpc_id      = var.vpc_id
 
     ingress {
@@ -76,11 +76,11 @@ resource "aws_launch_template" "main" {
       ipv6_cidr_blocks = ["::/0"]
     }
 
-  tags = merge(var.tags, { Name = "${var.component}- ${var.env}" })
+  tags = merge(var.tags, { Name = "${var.component}-${var.env}" })
 }
 
     resource "aws_lb_target_group" "main" {
-      name     = "${var.component}- ${var.env}"
+      name     = "${var.component}-${var.env}"
       port     = var.port
       protocol            = "HTTP"
       vpc_id              = var.vpc_id
@@ -90,6 +90,6 @@ resource "aws_launch_template" "main" {
         interval            = 5
         timeout             = 4
       }
-      tags = merge(var.tags, { Name = "${var.component}- ${var.env}" })
+      tags = merge(var.tags, { Name = "${var.component}-${var.env}" })
 
     }
