@@ -52,6 +52,14 @@ resource "aws_launch_template" "main" {
     vpc_id      = var.vpc_id
 
     ingress {
+      description      = "SSH"
+      from_port        = 22
+      to_port          = 22
+      protocol         = "tcp"
+      cidr_blocks      = var.bastion_cidr
+    }
+
+    ingress {
       description      = "APP"
       from_port        = var.port
       to_port          = var.port
