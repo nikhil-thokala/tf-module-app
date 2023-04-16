@@ -85,8 +85,9 @@ resource "aws_launch_template" "main" {
       protocol            = "HTTP"
       vpc_id              = var.vpc_id
       health_check {
+        enabled             = true
         healthy_threshold   = 2
-        unhealthy_threshold = 2
+        unhealthy_threshold = 5
         interval            = 5
         timeout             = 4
       }
