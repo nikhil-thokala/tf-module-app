@@ -17,7 +17,7 @@ resource "aws_launch_template" "main" {
   tag_specifications {
     resource_type = "instance"
 
-    tags = merge(var.tags, { Name = "${var.component}-${var.env}" })
+    tags = merge(var.tags, { Name = "${var.component}-${var.env}" , Monitor = "yes" })
   }
 
 
@@ -28,12 +28,12 @@ resource "aws_launch_template" "main" {
 }
 
   resource "aws_autoscaling_group" "main" {
-    name                  = "${var.component}-${var.env}"
-    desired_capacity      = var.desired_capacity
-    max_size              = var.max_size
-    min_size              = var.min_size
-    vpc_zone_identifier   = var.subnets
-    target_group_arns     = [aws_lb_target_group.main.arn]
+    name                = "${var.component}-${var.env}"
+    desired_capacity    = var.desired_capacity
+    max_size            = var.max_size
+    min_size            = var.min_size
+    vpc_zone_identifier = var.subnets
+    target_group_arns   = [aws_lb_target_group.main.arn]
 
     launch_template {
       id      = aws_launch_template.main.id
@@ -45,7 +45,6 @@ resource "aws_launch_template" "main" {
       value               = "${var.component}-${var.env}"
     }
   }
-
 
   resource "aws_security_group" "main" {
     name        = "${var.component}-${var.env}"
