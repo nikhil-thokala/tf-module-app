@@ -97,6 +97,7 @@ resource "aws_launch_template" "main" {
         unhealthy_threshold = 5
         interval            = 5
         timeout             = 4
+        path                = "/health"
       }
       tags = merge(var.tags, { Name = "${var.component}-${var.env}" })
     }
