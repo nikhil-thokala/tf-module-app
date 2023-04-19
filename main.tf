@@ -67,6 +67,14 @@ resource "aws_launch_template" "main" {
       cidr_blocks      = var.allow_app_to
     }
 
+    ingress {
+      description      = "PROMETHEUS"
+      from_port        = 9100
+      to_port          = 9100
+      protocol         = "tcp"
+      cidr_blocks      = var.monitoring_nodes
+    }
+
     egress {
       from_port        = 0
       to_port          = 0
